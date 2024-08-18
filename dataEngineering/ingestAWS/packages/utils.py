@@ -130,5 +130,15 @@ def fetch_crude_oil_brent():
     
     return df.sort_index(ascending=True)
 
-def get_yesterday(df: pd.DataFrame) -> pd.series:
-    return df.iloc[0]
+def get_row_by_date(df: pd.DataFrame, date: str) -> pd.Series:
+    # Ensure the date is in the correct format
+    try:
+        date = pd.to_datetime(date)
+    except ValueError:
+        raise ValueError("The date must be in the format 'YYYY-MM-DD'")
+    
+    # Query the row by the specified date
+    if date in df.index:
+        return df.loc[date]
+    else:
+        raise KeyError(f"No data found for the date {date}")
